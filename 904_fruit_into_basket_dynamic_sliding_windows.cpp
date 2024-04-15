@@ -36,59 +36,42 @@ public:
     int totalFruit(vector<int> &fruits)
     {
         // if the fruits.size is 0, then return 0;
-        if (fruits.size() == 0)
+        if (fruits.size() == 0 || fruits.size() ==1)
         {
-            return 0;
+            return fruits.size();
         }
         int start = 0;
-        int end = 1;
         set<int> set;
         set.insert(fruits[start]);
         int curr_size = 1;
         int max = -1;
         int last_update = start;
 
-        while (end < fruits.size())
+        for (int end = 1; end < fruits.size(); end++)
         {
             set.insert(fruits[end]);
-
             if (set.size() <= 2)
             {
-                // curr_size++;
-                curr_size ++;
+                if (fruits[end - 1] != fruits[end])
+                {
+                    last_update = end;
+                }
+                curr_size++;
             }
             else
             {
-                // there are at least 3 element inside the set, stop and do
-                //    1. curr_size = end - start + 1
-                //    2. update max < curr_size ? curr_size: max;
-                //    3. start = last_update
-                //    4. last_update = end;
-                //    5. end ++
-                // 1. get the current size and update max
-                curr_size = end - start + 1;
-                if (max < curr_size)
-                {
-                    max = curr_size;
-                }
                 start = last_update;
                 last_update = end;
-                set.clear();
-                set.insert(fruits[start]);
-                set.insert(fruits[end]);
                 curr_size = end - start + 1;
+                set.clear();
+                set.insert(fruits[end]);
+                set.insert(fruits[start]);
             }
-            if (fruits[end - 1] != fruits[end])
+            if (max < curr_size)
             {
-                last_update = end;
+                max = curr_size;
             }
-            end++;
         }
-        if (max < curr_size)
-        {
-            max = curr_size;
-        }
-
         return max;
     }
 };
